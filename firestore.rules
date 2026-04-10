@@ -1,0 +1,88 @@
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: users
+// Document ID: {userId}
+// Fields:
+//   - uid: string (required) - Firebase Auth UID
+//   - displayName: string (optional) - User's full name
+//   - email: string (required) - User's email address
+//   - photoURL: string (optional) - User's profile picture URL
+//   - createdAt: timestamp (optional) - Account creation timestamp
+//
+// Collection: posts
+// Document ID: {postId}
+// Fields:
+//   - title: string (required) - Post title
+//   - content: string (required) - Post body content
+//   - authorId: string (required) - UID of the post author
+//   - authorName: string (optional) - Name of the post author
+//   - imageUrl: string (optional) - Optional image URL
+//   - timestamp: timestamp (required) - Creation timestamp
+//
+// ===============================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isDocOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.authorId;
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidString(val, min, max) {
+      return val is string && val.size() >= min && val.size() <= max;
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email']) &&
+             data.uid == request.auth.uid &&
+             isValidEmail(data.email);
+    }
+
+    function isValidPost(data) {
+      return data.keys().hasAll(['title', 'content', 'authorId', 'timestamp']) &&
+             isValidString(data.title, 1, 200) &&
+             isValidString(data.content, 1, 10000) &&
+             data.authorId == request.auth.uid;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+    }
+
+    match /posts/{postId} {
+      allow read: if true; // Public feed
+      allow create: if isAuthenticated() && isValidPost(request.resource.data);
+      allow update: if isDocOwner() && isValidPost(request.resource.data);
+      allow delete: if isDocOwner();
+    }
+  }
+}

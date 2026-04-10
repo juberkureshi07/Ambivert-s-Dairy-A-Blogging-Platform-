@@ -1,0 +1,5 @@
+{
+  "name": "Android-Style Blog App",
+  "description": "A full-stack blogging application with Firebase integration, featuring an Android-inspired UI and complete project structure.",
+  "requestFramePermissions": []
+}

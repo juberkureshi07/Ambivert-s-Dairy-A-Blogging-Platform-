@@ -1,0 +1,41 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "description": "User's full name" },
+        "email": { "type": "string", "format": "email", "description": "User's email address" },
+        "photoURL": { "type": "string", "description": "User's profile picture URL" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Account creation timestamp" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "A blog post entry",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Post title" },
+        "content": { "type": "string", "description": "Post body content" },
+        "authorId": { "type": "string", "description": "UID of the post author" },
+        "authorName": { "type": "string", "description": "Name of the post author (denormalized)" },
+        "imageUrl": { "type": "string", "description": "Optional image URL from Firebase Storage" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["title", "content", "authorId", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/posts/{postId}": {
+      "schema": "Post",
+      "description": "Blog posts feed"
+    }
+  }
+}
