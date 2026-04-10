@@ -3,7 +3,7 @@ import { doc, getDoc, deleteDoc, Timestamp } from 'firebase/firestore';
 import { db, auth, OperationType, handleFirestoreError } from '../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
-import { Trash2, User, Clock, Share2 } from 'lucide-react';
+import { Trash2, User, Clock, Share2, Check } from 'lucide-react';
 
 interface Post {
   id: string;
@@ -19,6 +19,7 @@ export const PostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,6 +53,33 @@ export const PostDetail: React.FC = () => {
       navigate('/');
     } catch (err) {
       handleFirestoreError(err, OperationType.DELETE, postPath);
+    }
+  };
+
+  const handleShare = async () => {
+    if (!post) return;
+    const shareUrl = `${window.location.origin}/post/${post.id}`;
+    const shareData = {
+      title: post.title,
+      text: `Check out this post on Ambivert’s Diary: ${post.title}`,
+      url: shareUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error('Error sharing:', err);
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
     }
   };
 
@@ -92,10 +120,18 @@ export const PostDetail: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="flex space-x-2">
-              <button className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors">
-                <Share2 size={20} />
+            <div className="flex space-x-2 relative">
+              <button
+                onClick={handleShare}
+                className={`p-2 rounded-full transition-all ${copied ? 'text-green-600 bg-green-50' : 'text-gray-400 hover:text-indigo-600 hover:bg-indigo-50'}`}
+              >
+                {copied ? <Check size={20} /> : <Share2 size={20} />}
               </button>
+              {copied && (
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-2 rounded shadow-lg whitespace-nowrap">
+                  Link copied!
+                </div>
+              )}
               {isAuthor && (
                 <button
                   onClick={handleDelete}
