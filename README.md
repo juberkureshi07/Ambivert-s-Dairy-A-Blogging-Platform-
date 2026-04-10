@@ -23,7 +23,7 @@ Ambivert’s Diary is a sophisticated, full-stack blogging platform designed for
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/ambivert-diary.git
+   git clone https://github.com/juberkureshi07/Ambivert-s-Dairy-A-Blogging-Platform-.git
    cd ambivert-diary
    ```
 
