@@ -1,55 +1,77 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Home, Compass } from 'lucide-react';
 
 export const NotFound: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] py-12 px-6 text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        <div className="relative mb-8 select-none">
-          <span className="text-[140px] font-black text-gray-100 leading-none tracking-tighter">
-            404
-          </span>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-3xl font-bold text-gray-900 bg-white shadow-xl px-6 py-2 rounded-2xl transform rotate-3">
-              Oops!
-            </span>
-          </div>
-        </div>
-        
-        <h2 className="text-3xl font-extrabold text-gray-900 mb-4 tracking-tight">
-          Page Not Found
-        </h2>
-        <p className="text-gray-500 max-w-sm mb-12 mx-auto leading-relaxed">
-          The page you're searching for seems to have drifted away. It might have been deleted or moved to a different part of the diary.
+    <div className="relative w-full h-[calc(100vh-64px)] overflow-hidden font-nunito flex flex-col items-center justify-start text-white -m-4">
+      {/* Background with stars and gradient */}
+      <div 
+        className="absolute inset-0 z-0 bg-[#05007A] bg-center bg-repeat"
+        style={{ 
+          backgroundImage: 'url("https://assets.codepen.io/1538474/star.svg"), linear-gradient(to bottom, #05007A, #4D007D)',
+          backgroundAttachment: 'fixed'
+        }}
+      ></div>
+
+      {/* Mars at bottom */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-[27vh] z-10 bg-no-repeat bg-bottom bg-cover"
+        style={{ backgroundImage: 'url("https://assets.codepen.io/1538474/mars.svg")' }}
+      ></div>
+
+      {/* Logo 404 */}
+      <img 
+        src="https://assets.codepen.io/1538474/404.svg" 
+        alt="404"
+        className="absolute top-[16vh] w-[30vh] z-20" 
+      />
+
+      {/* Meteor */}
+      <img 
+        src="https://assets.codepen.io/1538474/meteor.svg" 
+        alt="meteor"
+        className="absolute right-[2vh] top-[16vh] z-10 pointer-events-none" 
+      />
+
+      {/* Text Content */}
+      <div className="relative z-30 flex flex-col items-center mt-[31vh] px-4 text-center">
+        <h2 className="text-[5vh] font-semibold leading-tight mb-2">Oh no!!</h2>
+        <p className="text-[3.5vh] font-normal opacity-90 mb-9">
+          You’re either misspelling the URL <br className="hidden sm:block" /> or requesting a page that's no longer here.
         </p>
         
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            to="/"
-            className="w-full sm:w-auto flex items-center justify-center px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95 group"
-          >
-            <Home size={20} className="mr-2 group-hover:-translate-y-0.5 transition-transform" />
-            Back to Home
-          </Link>
-          <Link
-            to="/"
-            className="w-full sm:w-auto flex items-center justify-center px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-2xl font-bold shadow-sm hover:bg-gray-50 transition-all active:scale-95 group"
-          >
-            <Compass size={20} className="mr-2 group-hover:rotate-12 transition-transform" />
-            Discover Posts
-          </Link>
-        </div>
-      </motion.div>
-      
-      {/* Decorative elements */}
-      <div className="absolute top-1/2 left-1/4 -z-10 w-32 h-32 bg-indigo-50 rounded-full blur-3xl opacity-60"></div>
-      <div className="absolute bottom-1/4 right-1/4 -z-10 w-48 h-48 bg-purple-50 rounded-full blur-3xl opacity-60"></div>
+        <button
+          onClick={() => navigate(-1)}
+          className="border border-white text-white px-6 py-2 rounded-lg text-[2.5vh] hover:bg-white hover:text-[#4D007D] transition-all active:scale-95 whitespace-nowrap"
+        >
+          Back to previous page
+        </button>
+      </div>
+
+      {/* Astronaut (Floating) */}
+      <motion.img 
+        src="https://assets.codepen.io/1538474/astronaut.svg" 
+        alt="astronaut"
+        className="absolute top-[18vh] left-[5vh] h-[30vh] z-20 pointer-events-none"
+        animate={{
+          y: [0, 15, 0],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      {/* Spaceship */}
+      <img 
+        src="https://assets.codepen.io/1538474/spaceship.svg" 
+        alt="spaceship"
+        className="absolute bottom-[13vh] right-[10vh] w-[20vh] z-20 pointer-events-none" 
+      />
     </div>
   );
 };
