@@ -5,7 +5,7 @@ import { db, storage, auth, handleFirestoreError } from '../firebase';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Image as ImageIcon, X, Save, ArrowLeft } from 'lucide-react';
 import { motion } from 'motion/react';
-import { NotFound } from './NotFound';
+import { Page404 } from './Page404';
 
 export const EditPost: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -115,7 +115,7 @@ export const EditPost: React.FC = () => {
   }
 
   if (!postFound) {
-    return <NotFound />;
+    return <Page404 />;
   }
 
   return (

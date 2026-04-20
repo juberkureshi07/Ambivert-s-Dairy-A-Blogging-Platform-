@@ -5,7 +5,7 @@ import { db, handleFirestoreError } from '../firebase';
 import { formatDistanceToNow } from 'date-fns';
 import { MessageSquare, Clock, User as UserIcon, Calendar, Mail } from 'lucide-react';
 import { motion } from 'motion/react';
-import { NotFound } from './NotFound';
+import { Page404 } from './Page404';
 
 interface Post {
   id: string;
@@ -78,7 +78,7 @@ export const Profile: React.FC = () => {
   }
 
   if (!profile && !loading) {
-    return <NotFound />;
+    return <Page404 />;
   }
 
   return (

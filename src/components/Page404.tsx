@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 
-export const NotFound: React.FC = () => {
+export const Page404: React.FC = () => {
   const navigate = useNavigate();
 
   return (

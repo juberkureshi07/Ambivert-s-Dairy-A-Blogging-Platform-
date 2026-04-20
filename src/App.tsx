@@ -10,7 +10,7 @@ import { CreatePost } from './components/CreatePost';
 import { EditPost } from './components/EditPost';
 import { Profile } from './components/Profile';
 import { PostDetail } from './components/PostDetail';
-import { NotFound } from './components/NotFound';
+import { Page404 } from './components/Page404';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
@@ -68,7 +68,7 @@ const AppContent: React.FC = () => {
       } />
       <Route path="*" element={
         <Layout title="Not Found" showBack>
-          <NotFound />
+          <Page404 />
         </Layout>
       } />
     </Routes>

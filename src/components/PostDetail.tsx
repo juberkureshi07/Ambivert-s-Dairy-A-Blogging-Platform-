@@ -4,7 +4,7 @@ import { db, auth, handleFirestoreError } from '../firebase';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { Trash2, User, Clock, Share2, Check, Edit3 } from 'lucide-react';
-import { NotFound } from './NotFound';
+import { Page404 } from './Page404';
 
 interface Post {
   id: string;
@@ -95,7 +95,7 @@ export const PostDetail: React.FC = () => {
   }
 
   if (!post) {
-    return <NotFound />;
+    return <Page404 />;
   }
 
   const isAuthor = auth.currentUser?.uid === post.authorId;
